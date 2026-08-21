@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مناحل الفاخر - سحب التخفيضات الفوري</title>
+    <style>
+        body {
+            font-family: 'Cairo', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { color: #d4af37; margin-bottom: 10px; font-size: 24px; }
+        p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .result-box {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+        .btn {
+            background: #d4af37;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn:hover { background: #b89728; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .footer-note { font-size: 11px; color: #999; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>مناحل الفاخر</h1>
+        <p>اخدش حظك أو اضغط لاكتشاف نسبة التخفيض الخاصة بك على منتجاتنا الطبيعية!</p>
+        
+        <div class="result-box" id="result">🎁 جاهز للسحب؟</div>
+        
+        <button class="btn" id="spinBtn" onclick="startDraw()">اضغط هنا للسحب</button>
+        
+        <div class="footer-note">هذا العرض خاص ببطاقات العمل الرسمية لمناحل الفاخر.</div>
+    </div>
+
+    <script>
+        function startDraw() {
+            const btn = document.getElementById('spinBtn');
+            const resultBox = document.getElementById('result');
+            btn.disabled = true;
+            resultBox.innerHTML = "جاري السحب...";
+            
+            // تأثير حركة سريعة للأرقام
+            let counter = 0;
+            const interval = setInterval(() => {
+                const randomTemp = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100][Math.floor(Math.random() * 10)];
+                resultBox.innerHTML = randomTemp + "%";
+                counter++;
+                if (counter > 15) {
+                    clearInterval(interval);
+                    finalizeDiscount(resultBox, btn);
+                }
+            }, 100);
+        }
+
+        function finalizeDiscount(resultBox, btn) {
+            // توزيع الاحتمالات (مثال: التركيز على النسب الأكبر للخصومات المتوسطة والقليلة)
+            const discounts = [
+                { percent: "10%", weight: 40 },
+                { percent: "20%", weight: 30 },
+                { percent: "30%", weight: 15 },
+                { percent: "40%", weight: 8 },
+                { percent: "50%", weight: 5 },
+                { percent: "100%", weight: 2 } // نسبة قليلة جداً لتشويق إضافي
+            ];
+
+            let totalWeight = discounts.reduce((sum, item) => sum + item.weight, 0);
+            let randomNum = Math.random() * totalWeight;
+            
+            let selected = discounts[0].percent;
+            for (let item of discounts) {
+                if (randomNum < item.weight) {
+                    selected = item.percent;
+                    break;
+                }
+                randomNum -= item.weight;
+            }
+
+            resultBox.innerHTML = `مبروك! خصمك هو ${selected} 🎉`;
+            btn.innerHTML = "تم السحب بنجاح";
+        }
+    </script>
+</body>
+</html>
