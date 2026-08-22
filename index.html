@@ -2,100 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مناحل الفاخر - سحب التخفيضات</title>
+    <title>مناحل الفاخر</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #fdfbf7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        body { font-family: sans-serif; background: #fdfbf7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: #fff; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); text-align: center; max-width: 350px; border: 2px solid #d4af37; }
-        h1 { color: #d4af37; margin-bottom: 25px; }
-        #result { font-size: 20px; font-weight: bold; margin: 20px 0; color: #2c3e50; min-height: 60px; line-height: 1.4; }
-        .form-group { margin-bottom: 20px; text-align: right; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        input[type="tel"] { width: 90%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; direction: ltr; }
-        input[type="tel"]:focus { border-color: #d4af37; outline: none; }
-        .btn { background: #d4af37; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; transition: 0.3s; margin-top: 10px; }
-        .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .error-msg { color: #d9534f; }
-        .success-msg { color: #5cb85c; }
+        input { width: 90%; padding: 12px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; direction: ltr; }
+        .btn { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>مناحل الفاخر</h1>
-        
-        <div class="form-group" id="inputSection">
-            <label for="phoneNumber">أدخل رقم هاتفك لتسجيل السحب:</label>
-            <input type="tel" id="phoneNumber" placeholder="05XXXXXXXX" pattern="[0-9]{10,}" maxlength="15" required>
-        </div>
-
-        <div id="result">أدخل رقم هاتفك واضغط للسحب!</div>
-        <button class="btn" id="spinBtn" onclick="startDraw()">اضغط للسحب</button>
+        <label>أدخل رقم هاتفك لتسجيل الطلب:</label>
+        <input type="tel" id="phone" placeholder="06XXXXXXXX">
+        <button class="btn" onclick="sendToWhatsApp()">إرسال عبر واتساب</button>
     </div>
 
     <script>
-        // --- إعدادات الربط ---
-        // ألصق الرابط الجديد هنا بين علامتي الاقتباس:
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiQIPvcNHk-B5upE7U-_aXGL8PNhG_UFoeCqRa4n8lD4md8mC7eX-AQ9W26PXQs7hu/exec"; 
-        const STORAGE_KEY = 'alfakhir_drew_v3'; // تم تغيير المفتاح لإعادة تفعيل السحب للجميع
-
-        async function startDraw() {
-            const btn = document.getElementById('spinBtn');
-            const resultBox = document.getElementById('result');
-            const phoneInput = document.getElementById('phoneNumber');
-            const inputSection = document.getElementById('inputSection');
-            const phoneNumber = phoneInput.value.trim();
-
-            // 1. التحقق من صحة رقم الهاتف
-            if (!phoneNumber || phoneNumber.length < 8 || !/^\d+$/.test(phoneNumber)) {
-                resultBox.innerHTML = "<span class='error-msg'>⚠️ يرجى إدخال رقم هاتف صحيح.</span>";
-                phoneInput.focus();
-                return;
-            }
-
-            // 2. منع تكرار السحب من نفس الجهاز (إجراء احترازي أولي)
-            if (localStorage.getItem(STORAGE_KEY) === phoneNumber) {
-                showAlreadyDrew(phoneNumber);
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = "جاري التحقق من السجل...";
-            resultBox.innerHTML = "🍯";
-            inputSection.style.display = 'none';
-
-            try {
-                // 3. إرسال البيانات إلى غوغل شيت للتحقق (الأمان الحقيقي)
-                let response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // لا يمكن قراءة الرد المباشر
-                    body: JSON.stringify({ phone: phoneNumber }) 
-                });
-
-                // 4. تسجيل نجاح العملية محلياً كإجراء أولي
-                localStorage.setItem(STORAGE_KEY, phoneNumber);
-
-                // 5. عرض رسالة عامة (لأن no-cors لا تسمح بقراءة الرد)
-                resultBox.innerHTML = `تم تسجيل طلب السحب برقم ${phoneNumber}. جاري معالجة الخصم...<br>سيتم تسجيل الخصم في السجل.`;
-                btn.innerHTML = "تم إرسال الطلب";
-                
-            } catch (error) {
-                console.error('Error:', error);
-                resultBox.innerHTML = "<span class='error-msg'>حدث خطأ في الاتصال بالخادم. يرجى المحاولة مرة أخرى.</span>";
-                btn.disabled = false;
-                btn.innerHTML = "اضغط للسحب";
-                inputSection.style.display = 'block';
-            }
-        }
-
-        function showAlreadyDrew(phone) {
-            const btn = document.getElementById('spinBtn');
-            const resultBox = document.getElementById('result');
-            const inputSection = document.getElementById('inputSection');
-            
-            resultBox.innerHTML = `لقد قمت بالسحب مسبقاً برقم ${phone}. السحب متاح مرة واحدة فقط لكل هاتف.`;
-            btn.disabled = true;
-            btn.innerHTML = "تم التسجيل مسبقاً";
-            inputSection.style.display = 'none';
+        function sendToWhatsApp() {
+            var phone = document.getElementById('phone').value;
+            // ضع رقم هاتفك الشخصي هنا (مع رمز الدولة، مثلاً 213)
+            var myNumber = "213655787605"; 
+            var url = "https://wa.me/" + myNumber + "?text=مرحباً، أريد التسجيل في السحب، رقم هاتفي هو: " + phone;
+            window.open(url, '_blank');
         }
     </script>
 </body>
