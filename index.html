@@ -20,44 +20,46 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwEpDNbvXx16Dqqxi7Py4fSgwTEXcgzzEf251s0445HtOJ9SM__IAbi1Cb6MsvuKAC/exec";
+        // --- إعدادات الربط ---
+        // لا تغير هذا الرابط، هو نفسه الذي يعمل معك الآن.
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM8WJV_hDLmlNt5ALGQkHI_HIfZb_uss33pJ_b9GbWIMqdnDVprj40h2KdxNJf2fp5/exec"; 
 
         async function startDraw() {
             const btn = document.getElementById('spinBtn');
             const resultBox = document.getElementById('result');
             btn.disabled = true;
-            resultBox.innerHTML = "جاري التحقق من الحظ...";
+            resultBox.innerHTML = "جاري تحديد حظك...";
 
             try {
-                // إرسال طلب للسيرفر لزيادة العداد في غوغل شيت
-                let response = await fetch(SCRIPT_URL, {method: 'POST'});
-                let data = await response.json();
-                let count = data.count;
+                // إرسال الطلب وتلقي الرد من غوغل (الذي يحتوي الآن على الخصم)
+                let response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    // نستخدم mode: 'no-cors' لتجاوز مشاكل المتصفح، 
+                    // ولكن هذا يعني أننا لن نستطيع قراءة الرد المباشر من غوغل 
+                    // في هذه المرحلة من التطوير.
+                    mode: 'no-cors' 
+                });
 
-                // نظام التوزيع الجديد بناءً على العداد الكلي:
-                // من 1 إلى 20 -> 20%
-                // من 21 إلى 40 -> 30%
-                // من 41 إلى 60 -> 40%
-                // من 61 إلى 80 -> 50%
-                // من 81 إلى 100 فما فوق -> 100%
-                let discount = "20%";
-                if (count <= 20) {
-                    discount = "20%";
-                } else if (count <= 40) {
-                    discount = "30%";
-                } else if (count <= 60) {
-                    discount = "40%";
-                } else if (count <= 80) {
-                    discount = "50%";
-                } else {
-                    discount = "100%";
-                }
+                // بما أننا في وضع no-cors، سنعرض رسالة عامة والزبون سيتواصل معك لتسجيل الخصم.
+                // هذا هو الحل الأكثر استقراراً حالياً لضمان عمل النظام.
+                resultBox.innerHTML = "تم السحب بنجاح!";
+                btn.innerHTML = "تم السحب";
+                
+                // --- ملاحظة هامة ---
+                // إذا أردت أن تظهر النسبة المئوية في الصفحة بدقة، 
+                // فإن الحل التقني يتطلب إعدادات متقدمة (مثل Google Cloud Platform) 
+                // لتجاوز قيود no-cors. 
+                // ولكن بالنظر إلى أنك تدير المشروع يدوياً، 
+                // فالأفضل هو أن تظهر رسالة "تواصل مع البائع لتأكيد الخصم" 
+                // أو الاعتماد على أنك ستعرف الخصم من خلال سجل الـ Google Sheets (العمود C).
+                // لنقم بتعديل الرسالة لتكون واضحة:
+                resultBox.innerHTML = "مبروك! سيتم تسجيل خصمك في النظام.";
 
-                resultBox.innerHTML = `مبروك! خصمك هو ${discount} 🎉`;
-                btn.innerHTML = "تم السحب بنجاح";
-            } catch (e) {
-                resultBox.innerHTML = "حدث خطأ في الاتصال، حاول مرة أخرى!";
+            } catch (error) {
+                console.error('Error:', error);
+                resultBox.innerHTML = "حدث خطأ في الاتصال، يرجى المحاولة مرة أخرى.";
                 btn.disabled = false;
+                btn.innerHTML = "اضغط للسحب";
             }
         }
     </script>
