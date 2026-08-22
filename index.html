@@ -5,17 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مناحل الفاخر - سحب التخفيضات</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #fdfbf7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #fdfbf7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: #fff; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); text-align: center; max-width: 350px; border: 2px solid #d4af37; }
-        .btn { background: #d4af37; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; width: 100%; font-size: 18px; margin-top: 20px; transition: 0.3s; }
-        .btn:disabled { background: #ccc; }
-        #result { font-size: 22px; font-weight: bold; margin: 20px 0; color: #2c3e50; min-height: 60px; }
+        h1 { color: #d4af37; margin-bottom: 25px; }
+        #result { font-size: 20px; font-weight: bold; margin: 20px 0; color: #2c3e50; min-height: 60px; }
+        .form-group { margin-bottom: 20px; text-align: right; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        input[type="tel"] { width: 90%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; direction: ltr; }
+        input[type="tel"]:focus { border-color: #d4af37; outline: none; }
+        .btn { background: #d4af37; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>مناحل الفاخر</h1>
-        <div id="result">اضغط للسحب واكتشاف خصمك!</div>
+        
+        <!-- قسم إدخال رقم الهاتف -->
+        <div class="form-group" id="inputSection">
+            <label for="phoneNumber">أدخل رقم هاتفك لتسجيل السحب:</label>
+            <input type="tel" id="phoneNumber" placeholder="05XXXXXXXX" pattern="[0-9]{10}" maxlength="10" required>
+        </div>
+
+        <div id="result">أدخل رقم هاتفك واضغط للسحب!</div>
         <button class="btn" id="spinBtn" onclick="startDraw()">اضغط للسحب</button>
     </div>
 
@@ -23,44 +35,78 @@
         // --- إعدادات الربط ---
         // لا تغير هذا الرابط، هو نفسه الذي يعمل معك الآن.
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM8WJV_hDLmlNt5ALGQkHI_HIfZb_uss33pJ_b9GbWIMqdnDVprj40h2KdxNJf2fp5/exec"; 
+        const STORAGE_KEY = 'alfakhir_drew'; // مفتاح تخزين محلي لمنع تكرار السحب
+
+        window.onload = function() {
+            // التحقق إذا كان هذا الجهاز قد سحب مسبقاً
+            if (localStorage.getItem(STORAGE_KEY)) {
+                showAlreadyDrew();
+            }
+        }
 
         async function startDraw() {
             const btn = document.getElementById('spinBtn');
             const resultBox = document.getElementById('result');
+            const phoneInput = document.getElementById('phoneNumber');
+            const inputSection = document.getElementById('inputSection');
+            const phoneNumber = phoneInput.value.trim();
+
+            // 1. التحقق من صحة رقم الهاتف
+            if (!phoneNumber || phoneNumber.length < 10 || !/^\d+$/.test(phoneNumber)) {
+                resultBox.innerHTML = "⚠️ يرجى إدخال رقم هاتف صحيح (10 أرقام)";
+                phoneInput.focus();
+                return;
+            }
+
+            // 2. منع تكرار السحب من نفس الجهاز
+            if (localStorage.getItem(STORAGE_KEY)) {
+                showAlreadyDrew();
+                return;
+            }
+
             btn.disabled = true;
-            resultBox.innerHTML = "جاري تحديد حظك...";
+            btn.innerHTML = "جاري السحب...";
+            resultBox.innerHTML = "🍯";
+            inputSection.style.display = 'none'; // إخفاء حقل الإدخال أثناء المعالجة
 
             try {
-                // إرسال الطلب وتلقي الرد من غوغل (الذي يحتوي الآن على الخصم)
+                // 3. إرسال البيانات إلى غوغل شيت
+                // سنرسل رقم الهاتف كـ POST body
                 let response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    // نستخدم mode: 'no-cors' لتجاوز مشاكل المتصفح، 
-                    // ولكن هذا يعني أننا لن نستطيع قراءة الرد المباشر من غوغل 
-                    // في هذه المرحلة من التطوير.
-                    mode: 'no-cors' 
+                    mode: 'no-cors', // نستخدم no-cors لتجاوز مشاكل المتصفح
+                    body: JSON.stringify({ phone: phoneNumber }) // إرسال الرقم
                 });
 
-                // بما أننا في وضع no-cors، سنعرض رسالة عامة والزبون سيتواصل معك لتسجيل الخصم.
-                // هذا هو الحل الأكثر استقراراً حالياً لضمان عمل النظام.
-                resultBox.innerHTML = "تم السحب بنجاح!";
-                btn.innerHTML = "تم السحب";
+                // 4. تسجيل نجاح العملية محلياً
+                localStorage.setItem(STORAGE_KEY, 'true');
+                localStorage.setItem(`${STORAGE_KEY}_phone`, phoneNumber); // تخزين الرقم الذي سحب
+
+                resultBox.innerHTML = `مبروك! تم تسجيل سحبك لرقم ${phoneNumber}. سيتم تأكيد الخصم عند الدفع.`;
+                btn.innerHTML = "تم السحب بنجاح";
                 
-                // --- ملاحظة هامة ---
-                // إذا أردت أن تظهر النسبة المئوية في الصفحة بدقة، 
-                // فإن الحل التقني يتطلب إعدادات متقدمة (مثل Google Cloud Platform) 
-                // لتجاوز قيود no-cors. 
-                // ولكن بالنظر إلى أنك تدير المشروع يدوياً، 
-                // فالأفضل هو أن تظهر رسالة "تواصل مع البائع لتأكيد الخصم" 
-                // أو الاعتماد على أنك ستعرف الخصم من خلال سجل الـ Google Sheets (العمود C).
-                // لنقم بتعديل الرسالة لتكون واضحة:
-                resultBox.innerHTML = "مبروك! سيتم تسجيل خصمك في النظام.";
+                // اختياري: إظهار زر للواتساب للتواصل معك (يمكنك تفعيله)
+                // resultBox.innerHTML += `<br><a href="https://wa.me/213YOUR_PHONE" target="_blank">تواصل معنا عبر واتساب</a>`;
 
             } catch (error) {
                 console.error('Error:', error);
                 resultBox.innerHTML = "حدث خطأ في الاتصال، يرجى المحاولة مرة أخرى.";
                 btn.disabled = false;
                 btn.innerHTML = "اضغط للسحب";
+                inputSection.style.display = 'block'; // إعادة إظهار حقل الإدخال في حال الخطأ
             }
+        }
+
+        function showAlreadyDrew() {
+            const btn = document.getElementById('spinBtn');
+            const resultBox = document.getElementById('result');
+            const inputSection = document.getElementById('inputSection');
+            
+            const savedPhone = localStorage.getItem(`${STORAGE_KEY}_phone`);
+            resultBox.innerHTML = `لقد قمت بالسحب مسبقاً${savedPhone ? ` برقم ${savedPhone}` : ''}. السحب متاح مرة واحدة فقط لكل هاتف.`;
+            btn.disabled = true;
+            btn.innerHTML = "تم التسجيل مسبقاً";
+            inputSection.style.display = 'none';
         }
     </script>
 </body>
