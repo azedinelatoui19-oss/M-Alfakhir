@@ -3,17 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام السحب على الخصومات</title>
+    <title>مناحل الفاخر - نظام السحب على الخصومات</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="card">
+            <!-- 🏷️ الرأس مع الشعار والعبارة -->
             <div class="header">
+                <div class="logo-container">
+                    <img src="01.svg" alt="شعار مناحل الفاخر" class="logo">
+                </div>
+                
                 <h1>🎁 نظام السحب على الخصومات</h1>
-                <p class="subtitle">احصل على خصم بسهولة!</p>
+                <p class="tagline">مناحل الفاخر تتمنى لكم حظ موفق 🌟</p>
+                <p class="subtitle">اسحب وقد تفوز بخصم مميز!</p>
             </div>
 
+            <!-- 📋 نموذج الإدخال -->
             <form id="drawForm" class="form">
                 <div class="form-group">
                     <label for="phone">رقم الهاتف:</label>
@@ -21,38 +28,68 @@
                         type="tel" 
                         id="phone" 
                         name="phone" 
-                        placeholder="0660******"
+                        placeholder="0655787605"
                         required
                         pattern="[0-9+]{10,}"
                     >
-                    <small>أدخل رقمك بصيغة صحيحة (مثال:0660******)</small>
+                    <small>أدخل رقمك بصيغة صحيحة</small>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn btn-primary">
-                    <span id="btnText">احصل على خصمك الآن</span>
+                    <span id="btnText">🎰 احسب خصمك الآن</span>
                     <span id="btnLoader" class="loader hidden"></span>
                 </button>
             </form>
 
-            <!-- عرض النتيجة -->
-            <div id="resultContainer" class="result-container hidden">
-                <div id="resultBox" class="result-box"></div>
+            <!-- 🎰 عرض الخصم (فقط الظهور بدون أزرار) -->
+            <div id="discountContainer" class="discount-container hidden">
+                <div class="discount-card">
+                    <h2 class="discount-emoji">🎉</h2>
+                    <p class="discount-text">خصمك هو:</p>
+                    <div class="discount-value" id="discountValue">10%</div>
+                    <p class="discount-phone" id="discountPhone">رقمك: 0655787605</p>
+                    <p class="saving-text" id="savingText">توفير كبير ينتظرك! 💰</p>
+                    
+                    <button id="autoSaveBtn" class="btn btn-auto-save">
+                        ✅ جاري الحفظ الآلي...
+                    </button>
+                </div>
             </div>
 
-            <!-- رسائل الخطأ -->
+            <!-- ✅ رسالة النجاح -->
+            <div id="successContainer" class="success-container hidden">
+                <div class="success-box">
+                    <h2>🎊 تم حفظ سحبك بنجاح!</h2>
+                    <p id="successMessage"></p>
+                    <p class="success-note">✅ تم تسجيل بيانات السحب في النظام</p>
+                    <p class="success-hint">💡 استمتع بخصمك عند الشراء القادم</p>
+                    
+                    <button id="newDrawBtn" class="btn btn-primary">
+                        🎲 سحب جديد (برقم آخر)
+                    </button>
+                </div>
+            </div>
+
+            <!-- ⚠️ رسائل الخطأ -->
             <div id="errorContainer" class="error-container hidden">
                 <div id="errorBox" class="error-box"></div>
             </div>
 
-            <!-- معلومات مفيدة -->
+            <!-- 💡 معلومات -->
             <div class="info-box">
-                <h3>💡 كيف يعمل النظام؟</h3>
+                <h3>💡 شروط السحب:</h3>
                 <ul>
                     <li>📱 أدخل رقم هاتفك</li>
-                    <li>✅ اضغط "احصل على خصمك"</li>
-                    <li>🎉 ستحصل على خصم حسب الحظ</li>
-                    <li>⚠️ كل رقم هاتف يسحب مرة واحدة فقط</li>
+                    <li>🎰 اضغط "احسب خصمك"</li>
+                    <li>🎉 سيظهر خصمك مباشرة</li>
+                    <li>✅ سيتم الحفظ تلقائياً</li>
+                    <li>⚠️ كل رقم يسحب مرة واحدة فقط</li>
+                    <li>🔑 الرقم 0655787605 حصص غير محدودة</li>
                 </ul>
+                <p class="disclaimer">
+                    🌟 <strong>نسب الخصومات:</strong><br>
+                    10% (90%) | 20% (8.5%) | 50% (1%) | 100% (0.5%)
+                </p>
             </div>
         </div>
     </div>
