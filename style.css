@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #d4a574 0%, #8b6f47 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -22,7 +22,7 @@ body {
 .card {
     background: white;
     border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     animation: slideUp 0.5s ease-out;
 }
@@ -39,20 +39,53 @@ body {
 }
 
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #d4a574 0%, #8b6f47 100%);
     color: white;
     padding: 30px 20px;
     text-align: center;
 }
 
+/* 🎁 تنسيق الشعار */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
 .header h1 {
     font-size: 28px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.tagline {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .subtitle {
     font-size: 14px;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .form {
@@ -83,8 +116,8 @@ body {
 
 .form-group input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #d4a574;
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
 }
 
 .form-group input::placeholder {
@@ -114,18 +147,27 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #d4a574 0%, #8b6f47 100%);
     color: white;
+    margin-bottom: 15px;
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 20px rgba(212, 165, 116, 0.4);
 }
 
 .btn-primary:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+}
+
+.btn-auto-save {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    color: #1a5f3f;
+    margin-top: 20px;
+    cursor: default;
+    font-weight: 700;
 }
 
 .loader {
@@ -145,13 +187,145 @@ body {
     to { transform: rotate(360deg); }
 }
 
-.result-container,
+/* 🎰 عرض الخصم */
+.discount-container {
+    padding: 20px;
+    animation: slideDown 0.5s ease-out;
+}
+
+.discount-container.hidden {
+    display: none;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.discount-card {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    padding: 40px 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    border: 3px solid #ffc700;
+}
+
+.discount-emoji {
+    font-size: 56px;
+    margin-bottom: 15px;
+    animation: bounce 0.8s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-15px) scale(1.1);
+    }
+}
+
+.discount-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.discount-value {
+    font-size: 72px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 20px 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+    animation: popIn 0.6s ease-out;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.discount-phone {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.saving-text {
+    font-size: 14px;
+    color: #d4a574;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* ✅ رسالة النجاح */
+.success-container {
+    padding: 20px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.success-container.hidden {
+    display: none;
+}
+
+.success-box {
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    color: #1a5f3f;
+}
+
+.success-box h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.success-box p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.success-note {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 12px;
+}
+
+.success-hint {
+    font-size: 13px;
+    color: #0f4c3f;
+    margin-bottom: 15px;
+}
+
+/* ⚠️ رسائل الخطأ */
 .error-container {
     padding: 20px;
     animation: fadeIn 0.4s ease-out;
 }
 
-.result-container.hidden,
 .error-container.hidden {
     display: none;
 }
@@ -163,31 +337,6 @@ body {
     to {
         opacity: 1;
     }
-}
-
-.result-box {
-    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-    padding: 20px;
-    border-radius: 10px;
-    color: #1a5f3f;
-    text-align: center;
-}
-
-.result-box h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.result-box .discount {
-    font-size: 48px;
-    font-weight: bold;
-    color: #e74c3c;
-    margin: 15px 0;
-}
-
-.result-box p {
-    font-size: 14px;
-    opacity: 0.8;
 }
 
 .error-box {
@@ -203,44 +352,79 @@ body {
     font-weight: 500;
 }
 
+/* 💡 معلومات */
 .info-box {
     background: #f5f5f5;
     padding: 20px;
     margin-top: 20px;
     border-radius: 10px;
     font-size: 14px;
+    border-left: 4px solid #d4a574;
 }
 
 .info-box h3 {
     margin-bottom: 15px;
     color: #333;
+    font-weight: 600;
 }
 
 .info-box ul {
     list-style: none;
+    margin-bottom: 15px;
 }
 
 .info-box li {
     padding: 8px 0;
     color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.info-box li:last-child {
+    border-bottom: none;
+}
+
+.disclaimer {
+    background: #e8f4f8;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.6;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
+    .logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .header {
+        padding: 25px 15px;
+    }
+
     .header h1 {
         font-size: 24px;
+    }
+
+    .tagline {
+        font-size: 14px;
     }
 
     .form {
         padding: 20px;
     }
 
-    .result-box .discount {
-        font-size: 36px;
+    .discount-value {
+        font-size: 56px;
     }
 
     .btn {
         padding: 12px;
         font-size: 14px;
+    }
+
+    .discount-card {
+        padding: 30px 20px;
     }
 }
