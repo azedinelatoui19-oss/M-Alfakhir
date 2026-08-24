@@ -1,5 +1,5 @@
 // ✅ الرابط الفعلي
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrcUEpZOEZHXPpmyXDOMv8BoqFLvin4TwwI9nYfuKNpS4EUjR_RJqeA6TdJr7-0z0r/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhbXrAO0ojiPaDmCPaWBszoo2wvj9XjN1sHiOHLIFLs8lRh7K-__Qj6Tvr5amq85ko/exec";
 const ADMIN_PHONE = "0655787605"; // الرقم الإداري
 
 // العناصر
@@ -29,7 +29,7 @@ let currentPhone = null;
 
 // ===== جدول الاحتمالات =====
 const DISCOUNT_PROBABILITIES = [
-    { discount: "10%", probability: 90, emoji: "😊", saving: "توفير بسيط لكن مفيد!" },
+    { discount: "10%", probability: 90, emoji: "😊", saving: "توفير مفيد!" },
     { discount: "20%", probability: 8.5, emoji: "😃", saving: "توفير جيد!" },
     { discount: "50%", probability: 1, emoji: "🤩", saving: "توفير رائع جداً!" },
     { discount: "100%", probability: 0.5, emoji: "🤑", saving: "مجاني تماماً! 🎁" }
