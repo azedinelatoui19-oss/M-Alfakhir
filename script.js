@@ -1,5 +1,5 @@
 // ✅ الرابط الفعلي
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx73DV9AnzfPwyiaSK0sZzF2yaHrh-eTpKCkohqwU6o0snmGGlyIMV7PcHBmuFg1-bq/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyucsMHXIqWbQNDnINVBNyB0nLayCa61CBjD1P7uajySQ-xlBDcHPKbItMohGkQIxDm/exec";
 const ADMIN_PHONE = "0655787605"; // الرقم الإداري
 
 // العناصر
