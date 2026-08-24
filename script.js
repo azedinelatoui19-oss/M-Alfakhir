@@ -72,20 +72,20 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // 🎲 حساب الخصم بناءً على الاحتمالات
-        const discount = calculateDiscountWithProbability();
+       // 🎲 حساب الخصم بناءً على الاحتمالات
+const discountObj = calculateDiscountWithProbability();
 
-        // 💾 حفظ البيانات مؤقتاً
-        currentDiscount = discount.discount;
-        currentPhone = phoneNumber;
+// 💾 حفظ البيانات مؤقتاً في المتغيرات العامة (تأكد من وجود هذه الأسطر)
+currentDiscount = discountObj.discount; // <-- تأكد أنك تأخذ قيمة الخصم وتضعها هنا
+currentPhone = phoneNumber;           // <-- وتأكد أن رقم الهاتف يُحفظ هنا أيضاً
 
-        // 🎰 عرض الخصم
-        displayDiscount(discount, phoneNumber);
+// 🎰 عرض الخصم للمستخدم
+displayDiscount(discountObj, phoneNumber);
 
-        // ⏱️ حفظ تلقائي بعد 3 ثوانٍ
-        setTimeout(() => {
-            autoSave();
-        }, 3000);
+// ⏱️ حفظ تلقائي بعد 3 ثوانٍ (أو استدعاء الدالة مباشرة)
+setTimeout(() => {
+    autoSave();
+}, 3000);
 
         isSubmitting = false;
         submitBtn.disabled = false;
@@ -110,7 +110,8 @@ autoSaveBtn.addEventListener("click", async () => {
 async function autoSave() {
     autoSaveBtn.disabled = true;
     autoSaveBtn.textContent = "⏳ جاري الحفظ...";
-
+// 🔍 أضف هذا السطر هنا لفحص القيم قبل إرسالها
+    console.log("🔍 فحص قبل الإرسال - الهاتف:", currentPhone, "الخصم:", currentDiscount);
     try {
         // 📤 إرسال البيانات إلى Google Sheets بدون حظر CORS
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
