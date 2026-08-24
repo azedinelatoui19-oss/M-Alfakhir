@@ -1,4 +1,4 @@
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrcUEpZOEZHXPpmyXDOMv8BoqFLvin4TwwI9nYfuKNpS4EUjR_RJqeA6TdJr7-0z0r/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhbXrAO0ojiPaDmCPaWBszoo2wvj9XjN1sHiOHLIFLs8lRh7K-__Qj6Tvr5amq85ko/exec";
 
 const form = document.getElementById("drawForm");
 const phoneInput = document.getElementById("phone");
