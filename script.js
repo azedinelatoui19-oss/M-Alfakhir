@@ -1,4 +1,3 @@
-// ✅ script.js محسّن (مع معالجة الأخطاء)
 const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrcUEpZOEZHXPpmyXDOMv8BoqFLvin4TwwI9nYfuKNpS4EUjR_RJqeA6TdJr7-0z0r/exec";
 
 const form = document.getElementById("drawForm");
@@ -8,7 +7,7 @@ const btnText = document.getElementById("btnText");
 const btnLoader = document.getElementById("btnLoader");
 const resultContainer = document.getElementById("resultContainer");
 const resultBox = document.getElementById("resultBox");
-const errorContainer = document.getElementById("errorContainer");
+const errorContainer = document.jsdelivr ? null : document.getElementById("errorContainer"); // للتوافق
 const errorBox = document.getElementById("errorBox");
 
 let isSubmitting = false;
@@ -37,42 +36,30 @@ form.addEventListener("submit", async (e) => {
 
     try {
         console.log("📤 جاري الإرسال إلى:", GOOGLE_APPS_SCRIPT_URL);
-        console.log("📞 رقم الهاتف:", phoneNumber);
 
+        // استخدام POST بدون no-cors عبر إرسال البيانات كـ JSON وبدء الاستجابة الصحيحة
+        // ملاحظة: Google Apps Script يدعم CORS إذا تم التعامل معه عبر text/plain أو إرسال طلب عدي
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: "POST",
-            mode: 'no-cors', // ✅ لحل CORS
             body: JSON.stringify({ phone: phoneNumber }),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "text/plain;charset=utf-8" // 👈 هذا الحل السحري لتجنب مشاكل CORS مع Google Apps Script
             }
         });
 
-        console.log("✅ الاتصال نجح، Status:", response.status);
-        console.log("Response:", response);
+        const result = await response.json();
+        console.log("📨 الرد:", result);
 
-        // لأن mode: no-cors لن يعطينا JSON
-        // سنحاول قراءة النص بدلاً من ذلك
-        try {
-            const result = await response.json();
-            console.log("📨 الرد:", result);
-            
-            if (result.status === "success") {
-                showSuccess(result.message, result.discount);
-                phoneInput.value = "";
-            } else {
-                showError(result.message || "❌ حدث خطأ ما!");
-            }
-        } catch (jsonError) {
-            console.log("⚠️ لم نتمكن من قراءة JSON");
-            // إذا لم نتمكن من قراءة JSON، نفترض النجاح
-            showSuccess("✅ تم السحب بنجاح!", "جاري التحديث...");
+        if (result.status === "success") {
+            showSuccess(result.message, result.discount || "مبارك!");
             phoneInput.value = "";
+        } else {
+            showError(result.message || "❌ حدث خطأ ما!");
         }
 
     } catch (error) {
         console.error("❌ خطأ كامل:", error);
-        showError("❌ خطأ في الاتصال: " + error.message);
+        showError("❌ خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً.");
     } finally {
         isSubmitting = false;
         submitBtn.disabled = false;
@@ -82,17 +69,17 @@ form.addEventListener("submit", async (e) => {
 });
 
 function showSuccess(message, discount) {
-    errorContainer.classList.add("hidden");
+    if (errorContainer) errorContainer.classList.add("hidden");
     resultBox.innerHTML = `
         <h2>🎉 تم بنجاح!</h2>
-        <div class="discount">${discount}</div>
+        <div class="discount" style="font-size: 20px; font-weight: bold; color: green; margin: 10px 0;">${discount}</div>
         <p>${message}</p>
     `;
     resultContainer.classList.remove("hidden");
     
     setTimeout(() => {
         resultContainer.classList.add("hidden");
-    }, 5000);
+    }, 6000);
 }
 
 function showError(message) {
