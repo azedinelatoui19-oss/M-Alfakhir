@@ -2,30 +2,61 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مناحل الفاخر</title>
-    <style>
-        body { font-family: sans-serif; background: #fdfbf7; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #fff; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); text-align: center; max-width: 350px; border: 2px solid #d4af37; }
-        input { width: 90%; padding: 12px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; direction: ltr; }
-        .btn { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام السحب على الخصومات</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="card">
-        <h1>مناحل الفاخر</h1>
-        <label>أدخل رقم هاتفك لتسجيل الطلب:</label>
-        <input type="tel" id="phone" placeholder="06XXXXXXXX">
-        <button class="btn" onclick="sendToWhatsApp()">إرسال عبر واتساب</button>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🎁 نظام السحب على الخصومات</h1>
+                <p class="subtitle">احصل على خصم بسهولة!</p>
+            </div>
+
+            <form id="drawForm" class="form">
+                <div class="form-group">
+                    <label for="phone">رقم الهاتف:</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="0655787605"
+                        required
+                        pattern="[0-9+]{10,}"
+                    >
+                    <small>أدخل رقمك بصيغة صحيحة (مثال: 0655787605)</small>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn btn-primary">
+                    <span id="btnText">احصل على خصمك الآن</span>
+                    <span id="btnLoader" class="loader hidden"></span>
+                </button>
+            </form>
+
+            <!-- عرض النتيجة -->
+            <div id="resultContainer" class="result-container hidden">
+                <div id="resultBox" class="result-box"></div>
+            </div>
+
+            <!-- رسائل الخطأ -->
+            <div id="errorContainer" class="error-container hidden">
+                <div id="errorBox" class="error-box"></div>
+            </div>
+
+            <!-- معلومات مفيدة -->
+            <div class="info-box">
+                <h3>💡 كيف يعمل النظام؟</h3>
+                <ul>
+                    <li>📱 أدخل رقم هاتفك</li>
+                    <li>✅ اضغط "احصل على خصمك"</li>
+                    <li>🎉 ستحصل على خصم حسب الحظ</li>
+                    <li>⚠️ كل رقم هاتف يسحب مرة واحدة فقط</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function sendToWhatsApp() {
-            var phone = document.getElementById('phone').value;
-            // ضع رقم هاتفك الشخصي هنا (مع رمز الدولة، مثلاً 213)
-            var myNumber = "213655787605"; 
-            var url = "https://wa.me/" + myNumber + "?text=مرحباً، أريد التسجيل في السحب، رقم هاتفي هو: " + phone;
-            window.open(url, '_blank');
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
