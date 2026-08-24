@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #d4a574 0%, #8b6f47 100%);
+    background-color: #ffffff; /* جعل الخلفية بيضاء ناصعة */
     min-height: 100vh;
     display: flex;
     align-items: center;
